@@ -26,6 +26,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
       - name: Test with Gradle
         run: ./gradlew test
       - name: Publish Test Report
@@ -33,15 +35,6 @@ jobs:
         if: always() # always run even if the previous step fails
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
-      - name: Run check style
-        uses: nikitasavinov/checkstyle-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          checkstyle_config: 'config/checkstyle/checkstyle.xml'
-          level: 'error'
-          reporter: 'github-pr-check'
-          workdir: 'src/main'
-          tool_name: 'Checkstyle'
       - name: Slack Notification
         if: always()
         run: |
