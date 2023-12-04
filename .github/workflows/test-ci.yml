@@ -26,8 +26,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
       - name: Test with Gradle
         run: ./gradlew test
       - name: Publish Test Report
