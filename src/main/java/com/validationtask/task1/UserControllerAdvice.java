@@ -26,6 +26,7 @@ public class UserControllerAdvice {
                 errors.stream().distinct().collect(Collectors.toList()));
         return ResponseEntity.badRequest().body(errorResponse);
     }
+    
     public static final class ErrorResponse {
         private HttpStatus httpStatus;
         private String message;
