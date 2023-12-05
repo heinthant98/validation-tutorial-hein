@@ -19,7 +19,7 @@ public class UserControllerAdvice {
         e.getBindingResult().getFieldErrors().forEach(fieldError -> {
             Map<String, Object> error = new HashMap<>();
             error.put("field", fieldError.getField());
-            error.put("message", fieldError.getDefaultMessage());
+            error.put("message", e.getBindingResult().getFieldErrors(fieldError.getField()).stream().map(FieldError::getDefaultMessage).collect(Collectors.toList()));
             errors.add(error);
         });
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "validation error",
