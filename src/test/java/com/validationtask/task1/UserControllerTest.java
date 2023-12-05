@@ -49,11 +49,15 @@ public class UserControllerTest {
                           "errors": [
                             {
                               "field": "username",
-                              "message": "ユーザー名を入力してください"
+                              "message": [
+                                "ユーザー名を入力してください"
+                              ]
                             },
                             {
                               "field": "password",
-                              "message": "パスワードを入力してください"
+                              "message": [
+                                "パスワードを入力してください"
+                              ]
                             }
                           ]
                         }
@@ -74,11 +78,17 @@ public class UserControllerTest {
                           "errors": [
                             {
                               "field": "username",
-                              "message": "ユーザー名は3文字以上20文字以下である必要があります"
+                              "message": [
+                                "ユーザー名は3文字以上20文字以下である必要があります",
+                                "ユーザー名を入力してください"
+                              ]
                             },
                             {
                               "field": "password",
-                              "message": "パスワードは8文字以上30文字以下である必要があります"
+                              "message": [
+                                "パスワードは8文字以上30文字以下である必要があります",
+                                "パスワードを入力してください"
+                              ]
                             }
                           ]
                         }
