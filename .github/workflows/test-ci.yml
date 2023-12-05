@@ -47,7 +47,7 @@ jobs:
           --arg commit '<${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} | ${{ github.sha }}>' '{
             attachments: [
               {
-                pretext: ":github: Test ${{ job.status }} :tekkun_move:",
+                pretext: ":incoming_envelope: Test ${{ job.status }}",
                 color: $color,
                 fields: [
                   {
