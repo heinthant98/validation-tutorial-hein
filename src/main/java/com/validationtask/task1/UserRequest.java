@@ -1,17 +1,20 @@
 package com.validationtask.task1;
 
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class UserRequest {
 
     @NotNull(message = "ユーザー名を入力してください")
+    @NotBlank(message = "ユーザー名を入力してください")
     @Size(min = 3, max = 20, message = "ユーザー名は3文字以上20文字以下である必要があります")
     private String username;
 
 
     @NotNull(message = "パスワードを入力してください")
+    @NotBlank(message = "パスワードを入力してください")
     @Size(min = 8, max = 30, message = "パスワードは8文字以上30文字以下である必要があります")
     private String password;
 
