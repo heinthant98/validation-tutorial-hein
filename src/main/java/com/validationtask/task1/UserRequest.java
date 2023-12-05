@@ -43,10 +43,6 @@ public class UserRequest {
         return confirmPassword;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     @AssertTrue(message = "パスワードと確認用パスワードが一致していません")
     public boolean isPasswordMatching() {
         if (password == null || password.isEmpty() || password.equals(confirmPassword)) {
