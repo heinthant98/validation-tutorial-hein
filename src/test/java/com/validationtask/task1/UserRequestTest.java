@@ -43,7 +43,7 @@ public class UserRequestTest {
     }
 
     @Test
-    public void usernameが3文字未満入力された時にバリテーションエラーとなること() {
+    public void usernameが3文字未満の時にバリテーションエラーとなること() {
         UserRequest userRequest = new UserRequest("us", "password", "password");
         Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
         assertThat(violations).hasSize(1);
