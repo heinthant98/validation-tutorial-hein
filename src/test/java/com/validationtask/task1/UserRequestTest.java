@@ -33,13 +33,23 @@ public class UserRequestTest {
     }
 
     @Test
-    public void usernameとpasswordとconfirmPasswordが空文字の時にバリデーションエラーとなること() {
-        UserRequest userRequest = new UserRequest("", "", "");
+    public void usernameが空文字の時にバリデーションエラーとなること() {
+        UserRequest userRequest = new UserRequest("", "password", "password");
         Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
         assertThat(violations).hasSize(2);
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
-                .containsExactlyInAnyOrder(tuple("username", "ユーザー名は3文字以上20文字以下である必要があります"), tuple("password", "パスワードは8文字以上30文字以下である必要があります"));
+                .containsExactlyInAnyOrder(tuple("username", "ユーザー名を入力してください"), tuple("username", "ユーザー名は3文字以上20文字以下である必要があります"));
+    }
+
+    @Test
+    public void passwordとconfirmPasswordが空文字の時にバリデーションエラーとなること() {
+        UserRequest userRequest = new UserRequest("user", "", "");
+        Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
+        assertThat(violations).hasSize(2);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactlyInAnyOrder(tuple("password", "パスワードを入力してください"), tuple("password", "パスワードは8文字以上30文字以下である必要があります"));
     }
 
     @Test
@@ -91,4 +101,5 @@ public class UserRequestTest {
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
                 .containsExactlyInAnyOrder(tuple("passwordMatching", "パスワードと確認用パスワードが一致していません"));
     }
+
 }
