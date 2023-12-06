@@ -23,6 +23,13 @@ public class UserRequestTest {
     }
 
     @Test
+    public void usernameとpasswordとconfirmPasswordが正当な場合はバリデーションエラーとならないこと() {
+        UserRequest userRequest = new UserRequest("user", "password", "password");
+        Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
     public void usernameとpasswordとconfirmPasswordがnullの時にバリデーションエラーとなること() {
         UserRequest userRequest = new UserRequest(null, null, null);
         Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
