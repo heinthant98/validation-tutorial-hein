@@ -5,11 +5,11 @@ import jakarta.validation.constraints.*;
 public class UserRequest {
 
     @NotBlank(message = "ユーザー名を入力してください")
-    @Size(min = 3, max = 20, message = "ユーザー名は3文字以上20文字以下である必要があります")
+    @Size(min = 3, max = 20, message = "ユーザー名は{min}文字以上{max}文字以下である必要があります")
     private String username;
 
     @NotBlank(message = "パスワードを入力してください")
-    @Size(min = 8, max = 30, message = "パスワードは8文字以上30文字以下である必要があります")
+    @Size(min = 8, max = 30, message = "パスワードは{min}文字以上{max}文字以下である必要があります")
     private String password;
 
     private String confirmPassword;
