@@ -60,6 +60,20 @@ public class UserRequestTest {
     }
 
     @Test
+    public void usernameが3文字の場合はバリデーションエラーとならないこと() {
+        UserRequest userRequest = new UserRequest("Rem", "password", "password");
+        Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
+        assertThat(violations).hasSize(0);
+    }
+
+    @Test
+    public void usernameが20文字の場合はバリデーションエラーとならないこと() {
+        UserRequest userRequest = new UserRequest("u".repeat(20), "password", "password");
+        Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
+        assertThat(violations).hasSize(0);
+    }
+
+    @Test
     public void usernameが3文字未満の時にバリテーションエラーとなること() {
         UserRequest userRequest = new UserRequest("us", "password", "password");
         Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
@@ -71,7 +85,7 @@ public class UserRequestTest {
 
     @Test
     public void usernameが20文字を超えるとバリテーションエラーとなること() {
-        UserRequest userRequest = new UserRequest("u".repeat(40), "password", "password");
+        UserRequest userRequest = new UserRequest("u".repeat(21), "password", "password");
         Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
         assertThat(violations).hasSize(1);
         assertThat(violations)
@@ -80,8 +94,22 @@ public class UserRequestTest {
     }
 
     @Test
+    public void passwordが8文字の場合はバリデーションエラーとならないこと() {
+        UserRequest userRequest = new UserRequest("user", "p".repeat(8), "p".repeat(8));
+        Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
+        assertThat(violations).hasSize(0);
+    }
+
+    @Test
+    public void passwordが30文字の場合はバリデーションエラーとならないこと() {
+        UserRequest userRequest = new UserRequest("user", "p".repeat(30), "p".repeat(30));
+        Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
+        assertThat(violations).hasSize(0);
+    }
+
+    @Test
     public void passwordが8文字未満の時にバリテーションエラーとなること() {
-        UserRequest userRequest = new UserRequest("user", "pass", "pass");
+        UserRequest userRequest = new UserRequest("user", "p".repeat(7), "p".repeat(7));
         Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
         assertThat(violations).hasSize(1);
         assertThat(violations)
@@ -91,7 +119,7 @@ public class UserRequestTest {
 
     @Test
     public void passwordが30文字を超えるとバリテーションエラーとなること() {
-        UserRequest userRequest = new UserRequest("user", "p".repeat(50), "p".repeat(50));
+        UserRequest userRequest = new UserRequest("user", "p".repeat(31), "p".repeat(31));
         Set<ConstraintViolation<UserRequest>> violations = validator.validate(userRequest);
         assertThat(violations).hasSize(1);
         assertThat(violations)
