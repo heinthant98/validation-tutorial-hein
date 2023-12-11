@@ -7,7 +7,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -26,7 +29,7 @@ public class UserControllerAdvice {
                 errors.stream().distinct().collect(Collectors.toList()));
         return ResponseEntity.badRequest().body(errorResponse);
     }
-    
+
     public static final class ErrorResponse {
         private HttpStatus httpStatus;
         private String message;

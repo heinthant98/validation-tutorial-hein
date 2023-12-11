@@ -1,6 +1,8 @@
 package com.validationtask.task1;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class UserRequest {
 
@@ -23,7 +25,7 @@ public class UserRequest {
     public String getUsername() {
         return username;
     }
-    
+
     public String getPassword() {
         return password;
     }
