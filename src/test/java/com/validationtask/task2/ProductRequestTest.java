@@ -1,6 +1,6 @@
 package com.validationtask.task2;
 
-import com.validationtask.task2.dto.ProductRequest;
+import com.validationtask.task2.request.ProductRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

@@ -1,6 +1,6 @@
 package com.validationtask.task2.controller;
 
-import com.validationtask.task2.dto.ProductRequest;
+import com.validationtask.task2.request.ProductRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package com.validationtask.task2.dto;
+package com.validationtask.task2.request;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;

@@ -1,7 +1,7 @@
 package com.validationtask.task2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.validationtask.task2.dto.ProductRequest;
+import com.validationtask.task2.request.ProductRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
