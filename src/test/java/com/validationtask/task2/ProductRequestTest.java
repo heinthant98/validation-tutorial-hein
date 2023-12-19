@@ -8,6 +8,8 @@ import jakarta.validation.ValidatorFactory;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Set;
 
@@ -24,9 +26,16 @@ public class ProductRequestTest {
         validator = factory.getValidator();
     }
 
-    @Test
-    public void productNameとcategoryとpriceが正当な場合バリデーションエラーにならないこと() {
-        ProductRequest product = new ProductRequest("iPhone15", "Electronics", 200000);
+    @ParameterizedTest
+    @CsvSource({
+            "iPhone15, Electronics, 200000",
+            "iPhone15, electronics, 200000",
+            "iPhone15, ELECTRONICS, 200000",
+            "PC, Electronics, 500000",
+            "Macbook Pro, Electronics, 1000000"
+    })
+    public void 有効なproductNameとcategoryとprice場合はバリデーションエラーとならないこと(String productName, String category, Integer price) {
+        ProductRequest product = new ProductRequest(productName, category, price);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(0);
     }
@@ -59,13 +68,6 @@ public class ProductRequestTest {
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
                 .containsExactlyInAnyOrder(tuple("productName", "入力してください"), tuple("productName", "2文字以上20文字以下である必要があります"));
-    }
-
-    @Test
-    public void productNameが2文字の場合はバリデーションエラーとならないこと() {
-        ProductRequest product = new ProductRequest("PC", "Electronics", 100000);
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(0);
     }
 
     @Test
@@ -116,20 +118,6 @@ public class ProductRequestTest {
     }
 
     @Test
-    public void categoryに入力された文字列が全部小文字の場合でもバリデーションエラーにならないこと() {
-        ProductRequest product = new ProductRequest("iPhone15", "electronics", 300000);
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(0);
-    }
-
-    @Test
-    public void categoryに入力された文字列が全部大文字の場合でもバリデーションエラーにならないこと() {
-        ProductRequest product = new ProductRequest("iPhone15", "ELECTRONICS", 300000);
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(0);
-    }
-
-    @Test
     public void categoryに存在しない文字列の場合はバリデーションエラーとなること() {
         ProductRequest product = new ProductRequest("iPhone15", "Food", 300000);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
@@ -147,13 +135,6 @@ public class ProductRequestTest {
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
                 .containsExactly(tuple("price", "0より大きい値である必要があります"));
-    }
-
-    @Test
-    public void priceが1000000の場合はバリデーションエラーとならないこと() {
-        ProductRequest product = new ProductRequest("iPhone15", "Electronics", 1000000);
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(0);
     }
 
     @Test
