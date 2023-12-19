@@ -79,7 +79,7 @@ public class ProductRequest {
 
         @Override
         public boolean isValid(String value, ConstraintValidatorContext context) {
-            if (value == null || value.isBlank()) {
+            if (value == null) {
                 return true;
             }
 
