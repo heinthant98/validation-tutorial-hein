@@ -99,20 +99,20 @@ public class ProductRequestTest {
     public void categoryが空文字の場合はバリデーションエラーとなること() {
         ProductRequest product = new ProductRequest("iPhone15", "", 300000);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(1);
+        assertThat(violations).hasSize(2);
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
-                .containsExactlyInAnyOrder(tuple("category", "入力してください"));
+                .containsExactlyInAnyOrder(tuple("category", "入力してください"), tuple("category", "無効なカテゴリです"));
     }
 
     @Test
     public void categoryが半角スペースの場合はバリデーションエラーとなること() {
         ProductRequest product = new ProductRequest("iPhone15", " ", 300000);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(1);
+        assertThat(violations).hasSize(2);
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
-                .containsExactly(tuple("category", "入力してください"));
+                .containsExactlyInAnyOrder(tuple("category", "入力してください"), tuple("category", "無効なカテゴリです"));
     }
 
     @Test
