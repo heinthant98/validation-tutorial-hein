@@ -97,7 +97,8 @@ public class ProductControllerTest {
                             {
                               "field": "category",
                               "message": [
-                                "入力してください"
+                                "入力してください",
+                                "無効なカテゴリです"
                               ]
                             },
                             {
