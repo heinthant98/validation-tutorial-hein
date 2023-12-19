@@ -32,9 +32,13 @@ public class ProductRequestTest {
             "iPhone15, electronics, 200000",
             "iPhone15, ELECTRONICS, 200000",
             "PC, Electronics, 500000",
+            "p, Electronics, 100000",
             "Macbook Pro, Electronics, 1000000"
     })
     public void 有効なproductNameとcategoryとprice場合はバリデーションエラーとならないこと(String productName, String category, Integer price) {
+        if (productName.equals("p")) {
+            productName = "p".repeat(20);
+        }
         ProductRequest product = new ProductRequest(productName, category, price);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(0);
@@ -78,13 +82,6 @@ public class ProductRequestTest {
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
                 .containsExactly(tuple("productName", "2文字以上20文字以下である必要があります"));
-    }
-
-    @Test
-    public void productNameが20文字の場合はバリデーションエラーとならないこと() {
-        ProductRequest product = new ProductRequest("p".repeat(20), "Electronics", 100000);
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(0);
     }
 
     @Test
