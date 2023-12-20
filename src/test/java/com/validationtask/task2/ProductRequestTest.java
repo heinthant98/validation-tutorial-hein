@@ -33,7 +33,8 @@ public class ProductRequestTest {
             "15, ELECTRONICS, 200000",
             "2, Electronics, 500000",
             "20, Electronics, 100000",
-            "18, Electronics, 1000000"
+            "18, Electronics, 1000000",
+            "18, Electronics, 1"
     })
     public void 有効なproductNameとcategoryとprice場合はバリデーションエラーとならないこと(int count, String category, Integer price) {
         ProductRequest product = new ProductRequest("p".repeat(count), category, price);
