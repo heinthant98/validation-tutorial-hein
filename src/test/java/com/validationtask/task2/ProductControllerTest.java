@@ -24,7 +24,7 @@ public class ProductControllerTest {
     private static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Test
-    public void product登録にデータが正当な場合201となること() throws Exception {
+    public void product登録時にデータが正しい場合201となること() throws Exception {
         ProductRequest productRequest = new ProductRequest("iPhone15", "Electronics", 500000);
         ResultActions result = mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
