@@ -1,4 +1,4 @@
-package com.validationtask.controllerAdvice;
+package com.validationtask.controlleradvice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
