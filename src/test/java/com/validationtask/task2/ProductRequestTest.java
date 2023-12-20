@@ -36,7 +36,7 @@ public class ProductRequestTest {
             "18, Electronics, 1000000",
             "18, Electronics, 1"
     })
-    public void 有効なproductNameとcategoryとprice場合はバリデーションエラーとならないこと(int count, String category, Integer price) {
+    public void productNameとcategoryとpriceが有効な場合はバリデーションエラーとならないこと(int count, String category, Integer price) {
         ProductRequest product = new ProductRequest("p".repeat(count), category, price);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(0);
