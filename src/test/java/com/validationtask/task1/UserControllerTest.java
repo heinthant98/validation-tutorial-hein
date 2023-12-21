@@ -22,7 +22,7 @@ public class UserControllerTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Test
-    public void ユーザ登録時にデータが正当な場合は201となること() throws Exception {
+    public void ユーザ登録時にデータが正しい場合は201となること() throws Exception {
         UserRequest user = new UserRequest("user", "password", "password");
         ResultActions actualResult = mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
