@@ -184,10 +184,13 @@ public class ProductRequestTest {
     }
 
     @Test
-    public void sellerが20文字の場合はバリデーションエラーとならないこと() {
-        ProductRequest product = new ProductRequest("iPad", "Electronics", 500000, "s".repeat(20));
+    public void sellerの文字数が20文字を超えるとバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 500000, "s".repeat(21));
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(0);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
     }
 
     @ParameterizedTest
