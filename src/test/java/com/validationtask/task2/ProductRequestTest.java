@@ -163,7 +163,7 @@ public class ProductRequestTest {
     }
 
     @Test
-    public void sellerが1文字の場合はバリデーションエラーとなること() {
+    public void sellerが2文字未満の場合はバリデーションエラーとなること() {
         ProductRequest product = new ProductRequest("iPad", "Electronics", 500000, "s");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(1);
