@@ -142,4 +142,66 @@ public class ProductRequestTest {
                 .containsExactly(tuple("price", "1000000以下である必要があります"));
     }
 
+    @Test
+    public void sellerが空文字の場合はバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 600000, "");
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
+    @Test
+    public void sellerが半角スペースの場合はバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 600000, " ");
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
+    @Test
+    public void sellerが1文字の場合はバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 500000, "s");
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "10, Electronics, 400000, \uD842\uDFB7",
+            "15, Electronics, 100000, \uD83E\uDEE0"
+    })
+    public void sellerに1文字のサロゲートペアの漢字と絵文字の場合はバリデーションエラーとならないこと(int count, String category, Integer price, String surrogatePairWord) {
+        ProductRequest product = new ProductRequest("p".repeat(count), category, price, surrogatePairWord);
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(0);
+    }
+
+    @Test
+    public void sellerが20文字の場合はバリデーションエラーとならないこと() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 500000, "s".repeat(20));
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(0);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "19, electronics, 300000, \uD842\uDFB7",
+            "19, electronics, 100000, \uD83E\uDEE0",
+    })
+    public void sellerに19文字のサロゲートペアの漢字と絵文字の場合はバリデーションエラーとなること(int count, String category, Integer price, String surrogatePairWord) {
+        ProductRequest product = new ProductRequest("p".repeat(count), category, price, "s".repeat(count).concat(surrogatePairWord));
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
 }
