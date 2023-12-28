@@ -174,8 +174,8 @@ public class ProductRequestTest {
 
     @ParameterizedTest
     @CsvSource({
-            "10, Electronics, 400000, \uD842\uDFB7",
-            "15, Electronics, 100000, \uD83E\uDEE0"
+            "10, Electronics, 400000, 𠮷",
+            "15, Electronics, 100000, 🫠"
     })
     public void sellerに1文字のサロゲートペアの漢字と絵文字の場合はバリデーションエラーとならないこと(int count, String category, Integer price, String surrogatePairWord) {
         ProductRequest product = new ProductRequest("p".repeat(count), category, price, surrogatePairWord);
@@ -195,8 +195,8 @@ public class ProductRequestTest {
 
     @ParameterizedTest
     @CsvSource({
-            "19, electronics, 300000, \uD842\uDFB7",
-            "19, electronics, 100000, \uD83E\uDEE0",
+            "19, electronics, 300000, 𠮷",
+            "19, electronics, 100000, 🫠",
     })
     public void sellerに19文字のサロゲートペアの漢字と絵文字の場合はバリデーションエラーとなること(int count, String category, Integer price, String surrogatePairWord) {
         ProductRequest product = new ProductRequest("p".repeat(count), category, price, "s".repeat(count).concat(surrogatePairWord));
