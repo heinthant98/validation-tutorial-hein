@@ -39,7 +39,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void product登録にproductNameとcategoryとpriceがnullの場合は400エラーとなること() throws Exception {
+    public void product登録にproductNameとcategoryとpriceとsellerがnullの場合は400エラーとなること() throws Exception {
         ProductRequest productRequest = new ProductRequest(null, null, null, null);
         ResultActions result = mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -81,7 +81,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void product登録にproductNameとcategoryが空文字でpriceが0の場合400エラーになること() throws Exception {
+    public void product登録にproductNameとcategoryとsellerが空文字でpriceが0の場合400エラーになること() throws Exception {
         ProductRequest productRequest = new ProductRequest("", "", 0, "");
         ResultActions result = mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
