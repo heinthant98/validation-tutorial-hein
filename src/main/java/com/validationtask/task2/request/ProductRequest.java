@@ -38,13 +38,7 @@ public class ProductRequest {
     public ProductRequest() {
 
     }
-
-    public ProductRequest(String productName, String category, Integer price) {
-        this.productName = productName;
-        this.category = category;
-        this.price = price;
-    }
-
+    
     public ProductRequest(String productName, String category, Integer price, String seller) {
         this.productName = productName;
         this.category = category;
