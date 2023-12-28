@@ -28,16 +28,16 @@ public class ProductRequestTest {
 
     @ParameterizedTest
     @CsvSource({
-            "5, Electronics, 200000, Yamada",
-            "10, electronics, 200000, Yamada",
-            "15, ELECTRONICS, 200000, Yamada",
-            "2, Electronics, 500000, Yamada",
-            "20, Electronics, 100000, Yamada",
-            "18, Electronics, 1000000, Yamada",
-            "18, Electronics, 1, Yamada"
+            "5, Electronics, 200000",
+            "10, electronics, 200000",
+            "15, ELECTRONICS, 200000",
+            "2, Electronics, 500000",
+            "20, Electronics, 100000",
+            "18, Electronics, 1000000",
+            "18, Electronics, 1"
     })
-    public void productNameとcategoryとpriceとsellerが有効な場合はバリデーションエラーとならないこと(int count, String category, Integer price, String seller) {
-        ProductRequest product = new ProductRequest("p".repeat(count), category, price, seller);
+    public void productNameとcategoryとpriceとsellerが有効な場合はバリデーションエラーとならないこと(int count, String category, Integer price) {
+        ProductRequest product = new ProductRequest("p".repeat(count), category, price, "s".repeat(count));
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(0);
     }
