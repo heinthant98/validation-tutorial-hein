@@ -43,13 +43,14 @@ public class ProductRequestTest {
     }
 
     @Test
-    public void productNameとcategoryとpriceがnullの場合バリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest(null, null, null);
+    public void productNameとcategoryとpriceとsellerがnullの場合バリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest(null, null, null, null);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(3);
+        assertThat(violations).hasSize(4);
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
-                .containsExactlyInAnyOrder(tuple("productName", "入力してください"), tuple("category", "入力してください"), tuple("price", "入力してください"));
+                .containsExactlyInAnyOrder(tuple("productName", "入力してください"), tuple("category", "入力してください"),
+                        tuple("price", "入力してください"), tuple("seller", "無効な販売者です"));
     }
 
     @Test
