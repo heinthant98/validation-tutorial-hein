@@ -28,33 +28,34 @@ public class ProductRequestTest {
 
     @ParameterizedTest
     @CsvSource({
-            "5, Electronics, 200000",
-            "10, electronics, 200000",
-            "15, ELECTRONICS, 200000",
-            "2, Electronics, 500000",
-            "20, Electronics, 100000",
-            "18, Electronics, 1000000",
-            "18, Electronics, 1"
+            "5, Electronics, 200000, 5",
+            "10, electronics, 200000, 10",
+            "15, ELECTRONICS, 200000, 15",
+            "2, Electronics, 500000, 2",
+            "20, Electronics, 100000, 20",
+            "18, Electronics, 1000000, 18",
+            "18, Electronics, 1, 20"
     })
-    public void productNameとcategoryとpriceが有効な場合はバリデーションエラーとならないこと(int count, String category, Integer price) {
-        ProductRequest product = new ProductRequest("p".repeat(count), category, price);
+    public void productNameとcategoryとpriceとsellerが有効な場合はバリデーションエラーとならないこと(int productNameCount, String category, Integer price, int sellerNameCount) {
+        ProductRequest product = new ProductRequest("p".repeat(productNameCount), category, price, "s".repeat(sellerNameCount));
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(0);
     }
 
     @Test
-    public void productNameとcategoryとpriceがnullの場合バリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest(null, null, null);
+    public void productNameとcategoryとpriceとsellerがnullの場合バリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest(null, null, null, null);
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
-        assertThat(violations).hasSize(3);
+        assertThat(violations).hasSize(4);
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
-                .containsExactlyInAnyOrder(tuple("productName", "入力してください"), tuple("category", "入力してください"), tuple("price", "入力してください"));
+                .containsExactlyInAnyOrder(tuple("productName", "入力してください"), tuple("category", "入力してください"),
+                        tuple("price", "入力してください"), tuple("seller", "無効な販売者です"));
     }
 
     @Test
     public void productNameが空文字の場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("", "Electronics", 100000);
+        ProductRequest product = new ProductRequest("", "Electronics", 100000, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(2);
         assertThat(violations)
@@ -64,7 +65,7 @@ public class ProductRequestTest {
 
     @Test
     public void productNameが半角スペースの場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest(" ", "Electronics", 100000);
+        ProductRequest product = new ProductRequest(" ", "Electronics", 100000, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(2);
         assertThat(violations)
@@ -74,7 +75,7 @@ public class ProductRequestTest {
 
     @Test
     public void productNameが2文字未満の場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("p", "Electronics", 100000);
+        ProductRequest product = new ProductRequest("p", "Electronics", 100000, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(1);
         assertThat(violations)
@@ -84,7 +85,7 @@ public class ProductRequestTest {
 
     @Test
     public void productNameが20文字を超えるとバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("p".repeat(21), "Electronics", 100000);
+        ProductRequest product = new ProductRequest("p".repeat(21), "Electronics", 100000, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(1);
         assertThat(violations)
@@ -94,7 +95,7 @@ public class ProductRequestTest {
 
     @Test
     public void categoryが空文字の場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("iPhone15", "", 300000);
+        ProductRequest product = new ProductRequest("iPhone15", "", 300000, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(2);
         assertThat(violations)
@@ -104,7 +105,7 @@ public class ProductRequestTest {
 
     @Test
     public void categoryが半角スペースの場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("iPhone15", " ", 300000);
+        ProductRequest product = new ProductRequest("iPhone15", " ", 300000, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(2);
         assertThat(violations)
@@ -114,7 +115,7 @@ public class ProductRequestTest {
 
     @Test
     public void categoryに存在しない文字列の場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("iPhone15", "Food", 300000);
+        ProductRequest product = new ProductRequest("iPhone15", "Food", 300000, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(1);
         assertThat(violations)
@@ -124,7 +125,7 @@ public class ProductRequestTest {
 
     @Test
     public void priceが0の場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("iPhone15", "Electronics", 0);
+        ProductRequest product = new ProductRequest("iPhone15", "Electronics", 0, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations).hasSize(1);
         assertThat(violations)
@@ -134,11 +135,76 @@ public class ProductRequestTest {
 
     @Test
     public void priceが1000001の場合はバリデーションエラーとなること() {
-        ProductRequest product = new ProductRequest("iPhone15", "Electronics", 1000001);
+        ProductRequest product = new ProductRequest("iPhone15", "Electronics", 1000001, "Yamada");
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
         assertThat(violations)
                 .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
                 .containsExactly(tuple("price", "1000000以下である必要があります"));
+    }
+
+    @Test
+    public void sellerが空文字の場合はバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 600000, "");
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
+    @Test
+    public void sellerが半角スペースの場合はバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 600000, " ");
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
+    @Test
+    public void sellerが2文字未満の場合はバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 500000, "s");
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "10, Electronics, 400000, 𠮷",
+            "15, Electronics, 100000, 🫠"
+    })
+    public void sellerに1文字のサロゲートペアの漢字と絵文字の場合はバリデーションエラーとならないこと(int count, String category, Integer price, String surrogatePairWord) {
+        ProductRequest product = new ProductRequest("p".repeat(count), category, price, surrogatePairWord);
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(0);
+    }
+
+    @Test
+    public void sellerの文字数が20文字を超えるとバリデーションエラーとなること() {
+        ProductRequest product = new ProductRequest("iPad", "Electronics", 500000, "s".repeat(21));
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "19, electronics, 300000, 𠮷",
+            "19, electronics, 100000, 🫠",
+    })
+    public void sellerに19文字のサロゲートペアの漢字と絵文字の場合はバリデーションエラーとなること(int count, String category, Integer price, String surrogatePairWord) {
+        ProductRequest product = new ProductRequest("p".repeat(count), category, price, "s".repeat(count).concat(surrogatePairWord));
+        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(product);
+        assertThat(violations).hasSize(1);
+        assertThat(violations)
+                .extracting(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactly(tuple("seller", "無効な販売者です"));
     }
 
 }
